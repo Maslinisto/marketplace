@@ -3,12 +3,9 @@ from sqlalchemy import Column, ForeignKey, Integer, SmallInteger, String, create
 from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import relationship
 #from app.config import settings
-
 #database_url = settings.DATABASE_URL
 #print('2', database_url)
 engine = create_engine("postgresql+psycopg2://postgres:bebra@localhost:5432/marketplace")
-
-
 Base = declarative_base()
 
 class Author(Base):

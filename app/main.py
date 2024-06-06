@@ -1,11 +1,8 @@
 from fastapi import FastAPI
+from app.database import Author
+from app.db_operations import session
+from app.routers import router as router_test
 
 app = FastAPI()
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-@app.get("/items/{item_id}")
-def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+app.include_router(router_test)
