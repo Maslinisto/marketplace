@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.database import Author, Book
-from app.db_operations import session
+from app.models import Author, Book
+from app.database import session
 
 router=APIRouter(
     prefix='/test',
@@ -13,7 +13,9 @@ def read_root():
 
 @router.get("/items")
 def read_item():
-    new_book = Book(title='New Book Title', copyright=2024, author_id=1)
+    new_book = Author(first_name = 'mr', last_name = 'scvs',)
     session.add(new_book)
     session.commit()
     return new_book
+#query = update(Author).where(Author.id==1).values(last_name="daaaas")
+#result = session.execute(query)
