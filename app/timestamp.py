@@ -1,6 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Column, DateTime, Integer, String, event, inspect
-from database import Base, session
+from app.database import Base, session
 from sqlalchemy.ext.declarative import declared_attr
 
 
