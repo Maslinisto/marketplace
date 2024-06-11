@@ -1,11 +1,11 @@
 from sqlalchemy import Integer, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from app.models.users import Users
-from app.models.products import Products
+from app.models.timestamp import TimestampMixin
 
-class FavoriteProducts(Base):
+class FavoriteProducts(TimestampMixin, Base):
     __tablename__ = "favorite_products"
+    
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
     product_id: Mapped[int] = mapped_column(Integer, ForeignKey("products.id"), nullable=False)

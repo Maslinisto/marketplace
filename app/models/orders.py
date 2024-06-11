@@ -1,10 +1,9 @@
-from typing import TYPE_CHECKING, Optional
 from sqlalchemy import Integer, String, DECIMAL, ForeignKey, JSON, TIMESTAMP, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from app.models.users import Users
+from app.models.timestamp import TimestampMixin
     
-class Orders(Base):
+class Orders(TimestampMixin, Base):
     __tablename__ = "orders"
     
     order_id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -20,4 +19,4 @@ class Orders(Base):
     shipping_cost: Mapped[float] = mapped_column(DECIMAL(10, 2), nullable=False, default=0.00)
     updated_at: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
 
-    user: Mapped["Users"] = relationship(back_populates="order")
+    user: Mapped["Users"] = relationship(back_populates="orders")

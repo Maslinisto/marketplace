@@ -2,8 +2,9 @@ from typing import Optional, List
 from sqlalchemy import String, Integer, ForeignKey
 from sqlalchemy.orm import mapped_column, relationship, Mapped
 from app.database import Base
+from app.models.timestamp import TimestampMixin
 
-class Categories(Base):
+class Categories(TimestampMixin, Base):
     __tablename__ = "categories"
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)

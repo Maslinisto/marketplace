@@ -1,32 +1,52 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
+from app.models.categories import Categories
 from app.models.users import Users
-from app.models.favorite_products import FavoriteProducts
-from app.database import sessionmaker
+from app.database import get_db
+from fastapi import Depends
+from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 router=APIRouter(
     prefix='/test',
     tags=['Тест']
 )
 
-#@router.get("/")
-#def read_root():
-#    with sessionmaker() as session:
-#        return (session.query(Author).all())
+class UpdatePasswordRequest(BaseModel):
+    new_password: str
 
 @router.get("/add_user")
-def add_user():
-    with sessionmaker() as session:
-        new_user = Users(email = 'ddd@test.com', phone_number = '8911111111', hashed_password = 'dsdsds')
-        session.add(new_user)
-        session.commit()
-        return new_user
+def add_user(db: Session = Depends(get_db)):
+        new_user = Users(
+            email='ddd@test.com',
+            phone_number='8911111111',
+            hashed_password='dsdsds'
+        )
+        db.add(new_user)
     
+        # Сохранение изменений
+        db.commit()
+        
+        # Обновление сессии для получения данных о новом пользователе (например, его ID)
+        db.refresh(new_user)
+        
+        return {"message": "User added successfully", "user_id": new_user.id}
+
 @router.get("/add_fav_prod")
-def add_fav_prod():
-    with sessionmaker() as session:
-        new_prod = FavoriteProducts(user_id = 1, product_id = 2)
-        session.add(new_prod)
-        session.commit()
-        return new_prod
-#query = update(Author).where(Author.id==1).values(last_name="daaaas")
-#result = session.execute(query)
+def add_fav_prod(db: Session = Depends(get_db)):
+        item = db.query(Categories.name).first()
+        return item
+
+@router.post("/update_password/{user_id}")
+def update_password(user_id: int, request: UpdatePasswordRequest, db: Session = Depends(get_db)):
+    # Поиск пользователя по id
+    user = db.query(Users).filter(Users.id == user_id).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Обновление пароля пользователя
+    user.hashed_password = request.new_password
+    # Сохранение изменений
+    db.commit()
+    
+    return {"message": "Password updated successfully"}

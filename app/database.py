@@ -6,8 +6,7 @@ DATABASE_URL = settings.DATABASE_URL
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
-session = sessionmaker()
-ses = session()
+
 class Base(DeclarativeBase):
     pass
 

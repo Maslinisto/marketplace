@@ -1,16 +1,12 @@
-from typing import List, Optional, TYPE_CHECKING
+from typing import List, Optional
 from sqlalchemy import String, Integer, Boolean, TIMESTAMP
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.sql import func
 from app.database import Base
 from datetime import datetime
+from app.models.timestamp import TimestampMixin
 
-if TYPE_CHECKING:
-    from models.orders import Orders
-    from models.carts import Carts
-    from models.favorite_products import FavoriteProducts
-    from models.reviews import Reviews
-class Users(Base):
+class Users(TimestampMixin, Base):
     __tablename__ = "users"
     
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
@@ -26,5 +22,4 @@ class Users(Base):
     carts: Mapped[list["Carts"]] = relationship(back_populates="user")
     orders: Mapped[List["Orders"]] = relationship(back_populates="user")
     favorite_products: Mapped[list["FavoriteProducts"]] = relationship(back_populates="user")
-    #fav_prods: Mapped[list["FavProds"]] = relationship(back_populates="user")
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="user")
