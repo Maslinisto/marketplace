@@ -2,7 +2,8 @@ from typing import Optional
 from sqlalchemy import Integer, Text, TIMESTAMP, ForeignKey, func, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-
+from app.models.users import Users
+from app.models.products import Products
 class Reviews(Base):
     __tablename__ = "reviews"
     

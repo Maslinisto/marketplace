@@ -1,4 +1,4 @@
-from typing import Optional, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 from sqlalchemy import String, Integer, Boolean, TIMESTAMP
 from sqlalchemy.orm import mapped_column, Mapped, relationship
 from sqlalchemy.sql import func
@@ -23,7 +23,8 @@ class Users(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
 
-    orders: Mapped[list["Orders"]] = relationship(back_populates="user")
     carts: Mapped[list["Carts"]] = relationship(back_populates="user")
+    orders: Mapped[List["Orders"]] = relationship(back_populates="user")
     favorite_products: Mapped[list["FavoriteProducts"]] = relationship(back_populates="user")
+    #fav_prods: Mapped[list["FavProds"]] = relationship(back_populates="user")
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="user")

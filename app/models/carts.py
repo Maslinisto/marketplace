@@ -1,12 +1,14 @@
 from sqlalchemy import Integer, DECIMAL, ForeignKey, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
+from app.models.users import Users
+from app.models.products import Products
 
 class Carts(Base):
     __tablename__ = "carts"
-    
-    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), primary_key=True, nullable=False)
-    product_id: Mapped[int] = mapped_column(Integer, ForeignKey("products.id"), primary_key=True, nullable=False)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
+    product_id: Mapped[int] = mapped_column(Integer, ForeignKey("products.id"), nullable=False)
     quantity: Mapped[float] = mapped_column(DECIMAL(10, 3), nullable=False)
     cost_of_position: Mapped[float] = mapped_column(DECIMAL(10, 2), nullable=False)
 

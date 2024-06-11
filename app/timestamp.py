@@ -1,8 +1,9 @@
 from datetime import datetime
-from sqlalchemy import Column, DateTime, Integer, String, event, inspect
-from app.database import Base, session
-from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy import Column, DateTime, Integer, String, event
+from sqlalchemy.orm import sessionmaker
+from app.database import Base, engine
 
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 class Timestamp(Base):
     __tablename__ = 'timestamp'
@@ -12,13 +13,10 @@ class Timestamp(Base):
     updated_at = Column(DateTime, nullable=True)
 
 class TimestampMixin:
-    @declared_attr
-    def id(cls):
-        return Column(Integer, primary_key=True)
-
     @staticmethod
     def update_timestamp(mapper, connection, target):
         table_name = target.__tablename__
+        session = SessionLocal()
         try:
             timestamp_record = session.query(Timestamp).filter_by(table_name=table_name).first()
             if not timestamp_record:
@@ -43,14 +41,17 @@ class TimestampMixin:
         # Register the event listener for table creation
         event.listen(cls.__table__, 'after_create', initialize_timestamp_record)
 
-# дата создания
+# Дата создания
 def initialize_timestamp_record(target, connection, **kw):
     table_name = target.name
-    if not session.query(Timestamp).filter_by(table_name=table_name).first():
-        timestamp_record = Timestamp(
-            table_name=table_name,
-            created_at=datetime.utcnow()
-        )
-        session.add(timestamp_record)
-    session.commit()
-    session.close()
+    session = SessionLocal()
+    try:
+        if not session.query(Timestamp).filter_by(table_name=table_name).first():
+            timestamp_record = Timestamp(
+                table_name=table_name,
+                created_at=datetime.utcnow()
+            )
+            session.add(timestamp_record)
+        session.commit()
+    finally:
+        session.close()

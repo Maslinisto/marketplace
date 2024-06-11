@@ -2,7 +2,7 @@ from typing import Optional
 from sqlalchemy import Boolean, String, Integer, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-
+from app.models.categories import Categories
 class Products(Base):
     __tablename__ = "products"
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -16,5 +16,6 @@ class Products(Base):
     category: Mapped["Categories"] = relationship(back_populates="products")
     carts: Mapped[list["Carts"]] = relationship("Carts", back_populates="product")
     favorite_products: Mapped[list["FavoriteProducts"]] = relationship(back_populates="product")
+    #fav_prods: Mapped[list["FavProds"]] = relationship(back_populates="product")
     reviews: Mapped[list["Reviews"]] = relationship(back_populates="product")
     products_in_shop: Mapped[list["ProductsInShop"]] = relationship(back_populates="product")

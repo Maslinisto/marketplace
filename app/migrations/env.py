@@ -13,10 +13,11 @@ from app.models.categories import Categories
 from app.models.products import Products
 from app.models.shops import Shops
 from app.models.favorite_products import FavoriteProducts
+#from app.models.fav_prods import FavProds
 from app.models.carts import Carts
-from app.models.orders import Orders
 from app.models.products_in_shops import ProductsInShop
 from app.models.reviews import Reviews
+from app.models.orders import Orders
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

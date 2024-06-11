@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Optional
 from sqlalchemy import Integer, String, DECIMAL, ForeignKey, JSON, TIMESTAMP, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
-from models.users import Users
+from app.models.users import Users
     
 class Orders(Base):
     __tablename__ = "orders"
