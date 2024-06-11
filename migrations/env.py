@@ -1,11 +1,11 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import engine_from_config, pool
 
 from alembic import context
+from app.database import Base
+from app.models.timestamp import Timestamp
 
-from app.database import engine, Base
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
@@ -20,22 +20,15 @@ if config.config_file_name is not None:
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
 
-from app.models.timestamp import Timestamp
-#from app.models.users import Users
-#from app.models.products import Products
-#from app.models.categories import Categories
-#from app.models.favorite_products import FavoriteProducts
-#from app.models.carts import Carts
-#from app.models.orders import Orders
-#from app.models.reviews import Reviews
-#from app.models.products_in_shops import ProductsInShops
-#from app.models.shops import Shops
+
 target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
 
 
 def run_migrations_offline() -> None:
@@ -70,7 +63,7 @@ def run_migrations_online() -> None:
 
     """
     connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
+        config.get_section(config.config_ini_section),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
@@ -82,6 +75,7 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 
 if context.is_offline_mode():

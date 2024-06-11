@@ -8,4 +8,4 @@ app = FastAPI()
 app.include_router(router_test)
 
 # Создание всех таблиц
-Base.metadata.create_all(bind=engine) #при вкл приложения создадутся таблицы и в timestamp внесутся даты создания
+#Base.metadata.create_all(bind=engine) #при вкл приложения создадутся таблицы и в timestamp внесутся даты создания

@@ -14,4 +14,3 @@ class Categories(TimestampMixin, Base):
     parent: Mapped[Optional["Categories"]] = relationship("Categories", remote_side=[id], back_populates="children")
     children: Mapped[List["Categories"]] = relationship("Categories", back_populates="parent")
     products: Mapped[list["Products"]] = relationship(back_populates="category")
-
