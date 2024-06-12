@@ -1,4 +1,3 @@
-from .timestamp import Timestamp
 from .categories import Categories
 from .carts import Carts
 from .favorite_products import FavoriteProducts
@@ -10,7 +9,6 @@ from .shops import Shops
 from .users import Users
 
 __all__ = [
-    "Timestamp",
     "Categories",
     "Carts",
     "FavoriteProducts",
