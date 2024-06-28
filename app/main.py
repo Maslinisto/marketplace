@@ -1,11 +1,22 @@
+import asyncio
 from fastapi import FastAPI
-from app.routers import router as router_test
-from app.database import engine, Base
-#import app.models  # Импортирует все модели через __init__.py
+from app.rabbit.rabbitmq import RabbitMQ
+from app.routers.routers_orders import router as router_orders
+from app.routers.routers_carts import router as router_carts
+from app.rabbit.process_orders import run as process_orders_main
+from app.rabbit.notify_customers import run as notify_customers_main
+
+
 
 app = FastAPI()
 
-app.include_router(router_test)
+@app.on_event("startup")
+async def startup_event():
+    RabbitMQ.setup_queues(host='localhost', queues=['new_orders', 'process_orders', 'notify_customers'])
+    
+    loop = asyncio.get_event_loop()
+    loop.create_task(asyncio.to_thread(process_orders_main))
+    loop.create_task(asyncio.to_thread(notify_customers_main))
 
-# Создание всех таблиц
-#Base.metadata.create_all(bind=engine) #при вкл приложения создадутся таблицы и в timestamp внесутся даты создания
+app.include_router(router_orders)
+app.include_router(router_carts)
