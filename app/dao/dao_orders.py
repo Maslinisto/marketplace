@@ -10,12 +10,10 @@ class OrdersDAO(BaseDAO):
 
     @classmethod
     def create_order(cls, user_id: int, db: Session):
-                # Получаем пользователя и проверяем его наличие
         user = db.query(Users).filter(Users.id == user_id).first()
         if not user:
             raise ValueError("User not found")
         
-        # Получаем товары из корзины пользователя
         cart_items = db.query(Carts).filter(Carts.user_id == user_id).all()
         if not cart_items:
             raise ValueError("Cart is empty")
@@ -28,7 +26,7 @@ class OrdersDAO(BaseDAO):
             user_id=user_id,
             ordered_items=ordered_items,
             total_amount=total_amount,
-            shipping_address=user.shipping_address,  # Assuming Users model has shipping_address field
+            shipping_address=user.shipping_address, 
             payment_method="по карте",
             shipping_method="aviasales"
         )

@@ -1,4 +1,3 @@
-# daos/carts_dao.py
 from sqlalchemy.orm import Session
 from app.models.carts import Carts
 from app.models.products import Products
@@ -11,10 +10,7 @@ class CartsDAO:
         product = db.query(Products).filter(Products.id == product_id, Products.available == True).first()
         if not product:
             raise ValueError("Product not found or not available")
-
-        # Вычисляем стоимость позиции
-        # Предположим, что цена продукта хранится в каком-то поле, например, product.price
-        # Если у вас нет такого поля, нужно будет его добавить
+        #Рандомную цену сделал чтоб не возиться с джоинами
         cost_of_position = 1000 * Decimal(quantity)
         
         # Проверяем, есть ли уже такая позиция в корзине

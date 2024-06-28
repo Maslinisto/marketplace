@@ -26,7 +26,7 @@ def process_order(ch, method, properties, body):
             "order_id": order_data["order_id"],
             "status": "Ваш заказ подтвержден и готовится к доставке"
         })
-        print('1 работаем в new_orders, получили инфу:', notification_message)
+        #print('1 работаем в new_orders, получили инфу:', notification_message)
         rabbitmq = RabbitMQ(host='localhost')
         rabbitmq.publish_message('notify_customers', notification_message)
         rabbitmq.close_connection()

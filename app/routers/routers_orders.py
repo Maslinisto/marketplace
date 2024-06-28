@@ -23,7 +23,7 @@ def create_order(user_id: int, db: Session = Depends(get_db)):
         })
         rabbitmq = RabbitMQ(host='localhost')
         rabbitmq.publish_message('new_orders', order_message)
-        print('0, закинули данные в new_orders:', order_message)
+        #print('0, закинули данные в new_orders:', order_message)
         rabbitmq.close_connection()
         return {"message": "Order created successfully", "order_id": order.order_id}
     except ValueError as e:
