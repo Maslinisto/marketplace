@@ -1,5 +1,7 @@
 import json
 from app.rabbit.rabbitmq import RabbitMQ
+from app.config import settings
+
 
 def notify_customer(ch, method, properties, body):
     notification_data = json.loads(body)
@@ -14,5 +16,6 @@ def notify_customer(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 def run():
-    rabbitmq = RabbitMQ(host='localhost')
+    rabbitmq = RabbitMQ(host=settings.RABBITMQ_HOST)
+    print("Starting consumer for notify_customers")
     rabbitmq.consume_messages('notify_customers', notify_customer)

@@ -11,3 +11,9 @@ Sending notification to user 1 about order 6: Ваш заказ подтверж
 
 в админке видно два коннекта rmq гуд ли это?
 когда вырубаем приложение - как мы оффаем соединения rmq?
+
+docker-compose up --build
+
+docker-compose up -d db rabbitmq
+docker-compose up -d migrations
+docker-compose down

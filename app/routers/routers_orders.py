@@ -4,7 +4,7 @@ from app.database import get_db
 from app.dao.dao_orders import OrdersDAO
 from app.rabbit.rabbitmq import RabbitMQ
 import json
-
+from app.config import settings
 
 router=APIRouter(
     prefix='/orders',
@@ -21,7 +21,7 @@ def create_order(user_id: int, db: Session = Depends(get_db)):
             "payment_method": order.payment_method,
             "items": order.ordered_items
         })
-        rabbitmq = RabbitMQ(host='localhost')
+        rabbitmq = RabbitMQ(host=settings.RABBITMQ_HOST)
         rabbitmq.publish_message('new_orders', order_message)
         #print('0, закинули данные в new_orders:', order_message)
         rabbitmq.close_connection()

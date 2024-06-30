@@ -2,6 +2,8 @@ import json
 from app.rabbit.rabbitmq import RabbitMQ
 from app.database import SessionLocal
 from app.models.orders import Orders
+from app.config import settings
+
 
 def process_order(ch, method, properties, body):
     db = SessionLocal()
@@ -27,7 +29,7 @@ def process_order(ch, method, properties, body):
             "status": "Ваш заказ подтвержден и готовится к доставке"
         })
         #print('1 работаем в new_orders, получили инфу:', notification_message)
-        rabbitmq = RabbitMQ(host='localhost')
+        rabbitmq = RabbitMQ(host=settings.RABBITMQ_HOST)
         rabbitmq.publish_message('notify_customers', notification_message)
         rabbitmq.close_connection()
         
@@ -39,5 +41,6 @@ def process_order(ch, method, properties, body):
         db.close()
 
 def run():
-    rabbitmq = RabbitMQ(host='localhost')
+    rabbitmq = RabbitMQ(host=settings.RABBITMQ_HOST)
+    print("Starting consumer for new_orders")
     rabbitmq.consume_messages('new_orders', process_order)
